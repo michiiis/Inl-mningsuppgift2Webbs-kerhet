@@ -1,0 +1,20 @@
+﻿@using Inlämningsuppgift2Webbsäkerhet.Models
+
+<EditForm Model=item OnSubmit="HandleSubmitAsync" class="d-flex my-3">
+    <InputText @bind-Value=item.Message class="form-control me-2" />
+    <button type="submit" class="btn btn-success px-4">Skicka</button>   
+</EditForm>
+
+@code {
+    private ChatMessage item { get; set; } = new ChatMessage();
+
+    private async Task HandleSubmitAsync()
+    {
+        item.Author = "Michaela Jonsson";
+        item.Created = DateTime.Now;
+
+        item = new();
+
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,64 @@
+﻿@page "/chat"
+@using System.Web
+@using Inlämningsuppgift2Webbsäkerhet.Models
+
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+    
+            @if(items != null)
+            {
+                <ul class="list-group">
+                    @foreach(var i in items)
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div class="d-flex align-items-start w-75">
+                                <i class="fas fa-user-circle me-4" style="font-size: 2.5rem;"></i>
+                                <div class="">@((MarkupString)i.Message)</div>
+                            </div>
+                            <div class="text-muted" style="font-size: 0.8rem;">
+                                @i.Created
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+    
+            <EditForm Model=MessageItem OnSubmit="HandleSubmitAsync" class="d-flex my-3">
+                <InputText @bind-Value=MessageItem.Message class="form-control me-2" />
+                <button type="submit" class="btn btn-success px-4">Skicka</button>   
+            </EditForm>
+
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    private ChatMessage MessageItem { get; set; } = new();
+    private List<ChatMessage> items = new List<ChatMessage>();
+    private string[] _tagsAllowed = new string[] { "<b>", "</b>", "<h3>", "</h3>", "<h4>", "</h4>" };
+
+    private async Task HandleSubmitAsync()
+    {
+        string encodedContent = HttpUtility.HtmlEncode(MessageItem.Message);
+        foreach(var tag in _tagsAllowed)
+        {
+            var encodedTag = HttpUtility.HtmlEncode(tag);
+            encodedContent = encodedContent.Replace(encodedTag, tag);
+        }
+                
+        MessageItem.Message = encodedContent;
+
+        MessageItem.Created = DateTime.Now;
+        MessageItem.Author = "Michaela Jonsson";
+
+
+        items.Add(MessageItem);
+        MessageItem = new();
+    }
+
+
+
+}

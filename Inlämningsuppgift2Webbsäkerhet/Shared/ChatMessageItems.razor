@@ -1,0 +1,21 @@
+﻿@using Inlämningsuppgift2Webbsäkerhet.Models
+
+
+@if(items != null)
+{
+    <ul class="list-group">
+        @foreach(var item in items)
+        {
+            <ChatMessageItem Item=item />
+        }
+    </ul>
+}
+else
+{
+    
+}
+
+@code {
+    private List<ChatMessage> items = new List<ChatMessage>();
+
+}
